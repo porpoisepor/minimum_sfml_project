@@ -3,10 +3,13 @@
 #include <SFML/Graphics.hpp>
 
 int main(){
-    sf::RenderWindow window(sf::VideoMode(800,600),"sfml window");
+    sf::RenderWindow window(sf::VideoMode(800,800),"Test");
     sf::Clock clock;
     float fps {60};
     sf::Time frameTime = sf::seconds(1.f / fps);
+
+    sf::Time timeSinceLastLoop{sf::Time::Zero};
+    sf::Time accumulatedTime(sf::Time::Zero);
 
     while(window.isOpen()){
         //event loop
@@ -18,17 +21,16 @@ int main(){
         }
 
         //frame loop
-        sf::Time timeSinceLastFrame{clock.restart()};
-        if(timeSinceLastFrame > frameTime){
-            //consider using an accumulator to make the fps constant
-
+        timeSinceLastLoop = clock.restart();
+        accumulatedTime += timeSinceLastLoop;
+        if(accumulatedTime > frameTime){
+            accumulatedTime -= frameTime;
             window.clear();
             //draw something;
             window.display();
         }
     }
-
-
     return 0;
 }
+
 
